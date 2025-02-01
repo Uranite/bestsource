@@ -58,16 +58,20 @@ jobs:
 
     - name: Install FFmpeg
       run: |
+        export CFLAGS="-march=znver3"
+        export CXXFLAGS="-march=znver3"
         git clone https://git.ffmpeg.org/ffmpeg.git -b release/7.1 --depth 1
         pushd ffmpeg
-        ./configure --prefix=/ucrt64 --enable-gpl --enable-version3 --disable-programs --disable-doc --disable-avdevice --disable-swresample --disable-swscale --disable-postproc --disable-avfilter --disable-encoders --disable-muxers --enable-lcms2 --enable-libdav1d --enable-libjxl --enable-libopus --enable-libxevd --enable-libxml2 --disable-nvenc --pkg-config-flags=--static --disable-debug --extra-cflags=-march=znver3 --extra-cxxflags=-march=znver3
+        ./configure --prefix=/ucrt64 --enable-gpl --enable-version3 --disable-programs --disable-doc --disable-avdevice --disable-swresample --disable-swscale --disable-postproc --disable-avfilter --disable-encoders --disable-muxers --enable-lcms2 --enable-libdav1d --enable-libjxl --enable-libopus --enable-libxevd --enable-libxml2 --disable-nvenc --pkg-config-flags=--static --disable-debug
         make install -j$(nproc)
         popd
         rm -rf ffmpeg
 
     - name: Build
       run: |
-        meson setup -Ddefault_library=static -Dprefer_static=true -Db_lto=true -Dc_args=-march=znver3 -Dcpp_args=-march=znver3 -Dcpp_link_args=-static build
+        export CFLAGS="-march=znver3"
+        export CXXFLAGS="-march=znver3"
+        meson setup -Ddefault_library=static -Dprefer_static=true -Db_lto=true -Dcpp_link_args=-static build
         ninja -C build
         strip build/bestsource.dll
 

@@ -40,8 +40,6 @@ jobs:
 
     - name: Install nv-codec-headers
       run: |
-        export CFLAGS="-march=znver3"
-        export CXXFLAGS="-march=znver3"
         git clone https://github.com/FFmpeg/nv-codec-headers.git --depth 1
         pushd nv-codec-headers
         make install -j$(nproc) PREFIX=/ucrt64
@@ -50,8 +48,6 @@ jobs:
 
     - name: Install XEVD
       run: |
-        export CFLAGS="-march=znver3"
-        export CXXFLAGS="-march=znver3"
         git clone https://github.com/mpeg5/xevd.git
         pushd xevd
         cmake --install-prefix /ucrt64 -S . -B build
@@ -62,8 +58,6 @@ jobs:
 
     - name: Install FFmpeg
       run: |
-        export CFLAGS="-march=znver3"
-        export CXXFLAGS="-march=znver3"
         git clone https://git.ffmpeg.org/ffmpeg.git -b release/7.1 --depth 1
         pushd ffmpeg
         ./configure --prefix=/ucrt64 --enable-gpl --enable-version3 --disable-programs --disable-doc --disable-avdevice --disable-swresample --disable-swscale --disable-postproc --disable-avfilter --disable-encoders --disable-muxers --enable-lcms2 --enable-libdav1d --enable-libjxl --enable-libopus --enable-libxevd --enable-libxml2 --disable-nvenc --pkg-config-flags=--static --disable-debug
@@ -73,9 +67,7 @@ jobs:
 
     - name: Build
       run: |
-        export CFLAGS="-march=znver3"
-        export CXXFLAGS="-march=znver3"
-        meson setup -Ddefault_library=static -Dprefer_static=true -Db_lto=true -Dcpp_link_args=-static build
+        meson setup -Ddefault_library=static -Dprefer_static=true -Db_lto=true -Dc_args=-march=znver3 -Dcpp_args=-march=znver3 -Dcpp_link_args=-static build
         ninja -C build
         strip build/bestsource.dll
 

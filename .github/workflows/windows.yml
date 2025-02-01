@@ -40,6 +40,8 @@ jobs:
 
     - name: Install nv-codec-headers
       run: |
+        export CFLAGS="-march=znver3"
+        export CXXFLAGS="-march=znver3"
         git clone https://github.com/FFmpeg/nv-codec-headers.git --depth 1
         pushd nv-codec-headers
         make install -j$(nproc) PREFIX=/ucrt64
@@ -48,6 +50,8 @@ jobs:
 
     - name: Install XEVD
       run: |
+        export CFLAGS="-march=znver3"
+        export CXXFLAGS="-march=znver3"
         git clone https://github.com/mpeg5/xevd.git
         pushd xevd
         cmake --install-prefix /ucrt64 -S . -B build

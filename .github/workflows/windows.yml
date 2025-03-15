@@ -69,8 +69,6 @@ jobs:
 
     - name: Build
       run: |
-        export CFLAGS="-march=znver3"
-        export CXXFLAGS="-march=znver3"
         meson setup -Ddefault_library=static -Dprefer_static=true -Db_lto=true -Dcpp_link_args=-static build
         ninja -C build
         strip build/bestsource.dll
